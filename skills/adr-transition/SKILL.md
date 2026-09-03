@@ -23,12 +23,12 @@ Apply the transition that matches what happened; do not use a generic `cancelled
 
 ## Allowed transitions
 
-- `draft -> accepted`: the problem statement, drivers, options, decision outcome, consequences, and confirmation are complete and the user explicitly approves it.
-- `draft -> rejected`: alternatives were evaluated and the proposed decision was explicitly declined. Record why.
-- `draft -> withdrawn`: the proposal was abandoned, became irrelevant, or was merged elsewhere before acceptance. Record why and link related work.
-- `accepted -> deprecated`: the decision no longer applies and no single new ADR replaces it. Record the effective reason/date and migration implications.
-- `accepted -> superseded`: only through `adr-supersede`, with a real replacement and reciprocal links.
-- `deprecated -> superseded`: allowed through `adr-supersede` if a later direct replacement is adopted.
+- `draft → accepted`: the problem statement, drivers, options, decision outcome, consequences, and confirmation are complete and the user explicitly approves it.
+- `draft → rejected`: alternatives were evaluated and the proposed decision was explicitly declined. Record why.
+- `draft → withdrawn`: the proposal was abandoned, became irrelevant, or was merged elsewhere before acceptance. Record why and link related work.
+- `accepted → deprecated`: the decision no longer applies and no single new ADR replaces it. Record the effective reason/date and migration implications.
+- `accepted → superseded`: only through `adr-supersede`, with a real replacement and reciprocal links.
+- `deprecated → superseded`: allowed through `adr-supersede` if a later direct replacement is adopted.
 
 Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. Reconsideration gets a new ADR linked under `## Links`, rather than reopening history.
 
@@ -36,10 +36,10 @@ Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. R
 
 1. Resolve the exact ADR and relevant linked ADRs by stable ID. Verify its current status.
 2. Infer the requested semantic action, but ask if the user's word "cancel" is ambiguous:
-   - cancel an undecided draft -> `withdrawn`;
-   - decide against a considered draft -> `rejected`;
-   - retire an accepted decision without replacement -> `deprecated`;
-   - replace it -> hand off to `adr-supersede`.
+   - cancel an undecided draft → `withdrawn`;
+   - decide against a considered draft → `rejected`;
+   - retire an accepted decision without replacement → `deprecated`;
+   - replace it → hand off to `adr-supersede`.
 3. Before a transition that changes governance, obtain explicit user intent. Do not accept, reject, deprecate, or supersede merely because code appears to have drifted.
 4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant links. Preserve the original decision record, including its stable `ADR-NNNN` ID.
 5. Check that related documentation no longer describes a non-active ADR as governing. Report references needing updates; change them only when the task authorizes it.
