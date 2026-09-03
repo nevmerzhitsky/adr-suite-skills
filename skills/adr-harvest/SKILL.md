@@ -31,6 +31,6 @@ A candidate should have lasting consequences beyond one local implementation det
 9. Refresh the bounded ADR catalog region in `docs/adrs/README.md`, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
 10. Check the generated ADRs against each other and active ADRs, then report uncovered ambiguities or apparent drift.
 
-Use the canonical template and statuses from the repository if present. Otherwise, follow the suite convention: four-digit filenames, matching `ADR-NNNN` IDs in H1 headings, and statuses `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`.
+Use the template from the `adr-create` skill in `assets/adr.md` when writing each ADR. Read it before writing, replace every `{placeholder}`, and omit no required section. Use the canonical statuses from the repository: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`.
 
 Do not mass-produce low-value ADRs. Prefer a small set of independent, durable decisions that explain why the system is constrained as it is.

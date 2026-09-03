@@ -16,6 +16,7 @@ Replace a decision without rewriting history. The old ADR explains why the earli
 - Normally only `accepted` or `deprecated` ADRs are superseded. If an abandoned `draft` has never governed the system, withdraw it and create a separate ADR instead.
 - Verify that the new ADR will replace the whole decision. `superseded` cannot represent partial validity. If the old ADR bundled several independently surviving decisions, split their continuing state into new focused ADRs or define a scoped exception while keeping the old ADR accepted.
 - Read related active ADRs and relevant implementation/specification evidence.
+- Use the template from the `adr-create` skill in `assets/adr.md` when writing the replacement. Read it before writing, replace every `{placeholder}`, and omit no required section.
 
 ## Workflow
 
