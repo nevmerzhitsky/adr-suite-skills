@@ -30,7 +30,7 @@ REQUIRED_HEADINGS = {
     "Links",
 }
 FILENAME = re.compile(r"^(?P<number>\d{4})-(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)\.md$")
-H1 = re.compile(r"^# ADR (?P<number>\d{4}): (?P<title>.+?)\s*$", re.MULTILINE)
+H1 = re.compile(r"^# ADR-(?P<number>\d{4}): (?P<title>.+?)\s*$", re.MULTILINE)
 HEADING = re.compile(r"^## (?P<title>.+?)\s*$", re.MULTILINE)
 LINK = re.compile(r"\[[^\]]+\]\((?P<target>[^)]+\.md(?:#[^)]*)?)\)")
 
@@ -89,10 +89,10 @@ def validate_file(path: Path, seen: dict[str, Path]) -> tuple[list[str], dict[st
 
     h1 = H1.search(body)
     if not h1:
-        errors.append("missing H1 '# ADR NNNN: Title'")
+        errors.append("missing H1 '# ADR-NNNN: Title'")
     else:
         if file_number and h1.group("number") != file_number:
-            errors.append("H1 number differs from filename")
+            errors.append("H1 stable ID differs from filename")
         if meta.get("title") and h1.group("title").strip('"\'') != meta["title"]:
             errors.append("H1 title differs from frontmatter title")
 

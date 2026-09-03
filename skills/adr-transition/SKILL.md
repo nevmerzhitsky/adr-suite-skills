@@ -34,15 +34,15 @@ Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. R
 
 ## Procedure
 
-1. Read the exact ADR and relevant linked ADRs. Verify its current status.
+1. Resolve the exact ADR and relevant linked ADRs by stable ID. Verify its current status.
 2. Infer the requested semantic action, but ask if the user's word "cancel" is ambiguous:
    - cancel an undecided draft -> `withdrawn`;
    - decide against a considered draft -> `rejected`;
    - retire an accepted decision without replacement -> `deprecated`;
    - replace it -> hand off to `adr-supersede`.
 3. Before a transition that changes governance, obtain explicit user intent. Do not accept, reject, deprecate, or supersede merely because code appears to have drifted.
-4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant links. Preserve the original decision record.
+4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant links. Preserve the original decision record, including its stable `ADR-NNNN` ID.
 5. Check that related documentation no longer describes a non-active ADR as governing. Report references needing updates; change them only when the task authorizes it.
-6. Refresh the bounded ADR catalog region in `docs/adrs/README.md` after the status change, creating it when absent. Include every ADR, sorted by number, with number, title, status, date, and replacement link. Preserve prose outside the region.
+6. Refresh the bounded ADR catalog region in `docs/adrs/README.md` after the status change, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
 
-All ADRs remain in `docs/adrs/` under their stable `NNNN-short-title.md` filenames.
+All ADRs remain in `docs/adrs/` under their stable `NNNN-short-title.md` filenames and retain their matching `ADR-NNNN` IDs. Cite them in human-facing documentation and code by stable ID.

@@ -19,20 +19,21 @@ This package contains several agent skills for the full Architecture Decision Re
 - Catalog: `docs/adrs/README.md`
 - Filename: `NNNN-short-title.md`, starting with `0001`
 - Allocation: highest existing number plus one; gaps are never reused
-- Stable identity: existing ADR files are never renumbered and normally never renamed
+- Stable ID: `ADR-NNNN`, where `NNNN` is the ADR number in its H1, filename, and frontmatter; for example, `ADR-0001`
+- Stable identity: existing ADR files and their IDs are never renumbered and normally never renamed
 - Statuses: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`
 
-`docs/adrs/README.md` is the ADR catalog. It has one row for every ADR, sorted by number, with its number, title, status, date, and replacement link. Keep the catalog in a bounded machine-maintained region so surrounding human prose remains intact:
+`docs/adrs/README.md` is the ADR catalog. It has one row for every ADR, sorted by number, with its stable ID, title, status, date, and replacement link. Keep the catalog in a bounded machine-maintained region so surrounding human prose remains intact:
 
 ```markdown
 <!-- adr-catalog:start -->
-| Number | Title | Status | Date | Superseded by |
-| --- | --- | --- | --- | --- |
-| [0001-short-title](0001-short-title.md) | Example decision | accepted | 2026-09-03 | - |
+| ADR | Status | Date | Superseded by |
+| --- | --- | --- | --- |
+| [0001-short-title](0001-short-title.md) | accepted | 2026-09-03 | - |
 <!-- adr-catalog:end -->
 ```
 
-Create the file with this region when it is absent. Refresh the region whenever an ADR is created or its status, title, date, or replacement changes. The catalog is the discovery view; ADR frontmatter remains the authoritative record for a decision's full content and lifecycle links.
+Create the file with this region when it is absent. Refresh the region whenever an ADR is created or its status, title, date, or replacement changes. The catalog is the discovery view; ADR frontmatter remains the authoritative record for a decision's full content and lifecycle links. Cite ADRs in documentation and code by stable ID, not by filename or title alone; use a relative Markdown link to the ADR file where links are supported or required.
 
 `cancelled` is deliberately not a canonical status because it hides three different events:
 
@@ -65,6 +66,7 @@ Skill descriptions enable relevant automatic discovery, especially for `adr-revi
 ## ADR governance
 
 - Store ADRs in `docs/adrs/` and use `NNNN-short-title.md` filenames.
+- Cite ADRs in documentation and code as `ADR-NNNN`.
 - Keep `docs/adrs/README.md` as the complete ADR catalog with each ADR's current status.
 - When creating or reviewing a feature specification, architecture plan, or significant technical design, run `adr-review-spec` before finalizing it.
 - If the review finds an unresolved architectural decision, use `adr-create` and link the resulting ADR from the specification or plan.

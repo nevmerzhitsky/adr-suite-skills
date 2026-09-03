@@ -15,7 +15,9 @@ Turn one architecturally significant topic into one explicit decision and one AD
 - Store ADRs in `docs/adrs/`.
 - Name them `NNNN-short-title.md`: four digits starting at `0001`, followed by a stable lowercase ASCII kebab-case slug.
 - Allocate `max(existing ADR number) + 1`. Never reuse gaps or renumber an existing ADR.
-- Once created, do not rename an ADR merely because its title changes; stable links are more important.
+- Give every ADR the stable ID `ADR-NNNN`, where `NNNN` matches its H1, filename, and frontmatter `number`; for example, `ADR-0001`.
+- Once created, do not rename or renumber an ADR merely because its title changes; its stable ID and links are more important.
+- Cite ADRs in documentation and code by stable ID, not filename or title alone.
 - Use only these statuses: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`.
 - Use `decision-makers` for people who made the decision. Always include `consulted` and `informed`; use empty lists when they do not apply.
 
@@ -35,8 +37,8 @@ Turn one architecturally significant topic into one explicit decision and one AD
 5. Discuss the decision with the user. Ask a small batch of high-leverage questions, preferably 1–3 at a time. Use selectable options when choices are known and an open question when the user's rationale or a missing alternative matters. Explain the consequence of each option.
 6. Record the selected option only after the user decides. State the outcome in active voice: `We will ...`. If the user wants documentation before deciding, create a `draft` with the unresolved questions visible. Set `accepted` only on explicit user approval.
 7. Check for overlap or conflict with existing ADRs. If the new decision replaces an active ADR, use the `adr-supersede` workflow instead.
-8. Write the next numbered file and validate its links and metadata.
-9. Refresh the bounded ADR catalog region in `docs/adrs/README.md`, creating it when absent. Include every ADR, sorted by number, with number, title, status, date, and replacement link. Preserve prose outside the region.
+8. Write the next numbered file with its matching stable ID and validate its links and metadata.
+9. Refresh the bounded ADR catalog region in `docs/adrs/README.md`, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
 
 ## ADR shape
 
@@ -55,7 +57,7 @@ supersedes: []
 superseded-by: null
 ---
 
-# ADR {NNNN}: {Short title}
+# ADR-{NNNN}: {Short title}
 
 Status: **draft**
 
@@ -112,7 +114,7 @@ We will {state the commitment in active voice}.
 * {Related ADR, RFC, design, issue, experiment, benchmark, or external reference.}
 ```
 
-For a replacement, use bare relative filenames in frontmatter, for example `supersedes: [0001-old-decision.md]` and `superseded-by: 0002-new-decision.md`; keep clickable Markdown links in `## Links`.
+For a replacement, use bare relative filenames in frontmatter, for example `supersedes: ADR-0001` and `superseded-by: ADR-0002`; keep clickable Markdown links in `## Links`. In human-facing prose, cite the records as stable IDs, for example `[ADR-0001](0001-old-decision.md)` and `[ADR-0002](0002-new-decision.md)`.
 
 Use the same option names in `Considered options`, `Decision outcome`, and `Pros and cons of options`. For every option, state material good and bad effects, including failure modes where relevant. Add neutral effects only when they carry useful information. In `Confirmation`, name observable evidence such as a test, design review, metric, or operational check that can confirm or challenge the decision. Use relative Markdown links within the repository.
 

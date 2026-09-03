@@ -12,7 +12,7 @@ Act as an ADR governance gate without turning every feature choice into an ADR.
 
 ## Review method
 
-1. Read the target specification/plan and its directly relevant context. Start discovery with the catalog in `docs/adrs/README.md`, then verify relevant ADR metadata and content. Inventory ADRs by status:
+1. Read the target specification/plan and its directly relevant context. Start discovery with the catalog in `docs/adrs/README.md`, then verify relevant ADR metadata and content. Identify each ADR by its stable `ADR-NNNN` ID. Inventory ADRs by status:
    - `accepted` ADRs are governing;
    - `draft` ADRs are advisory/unresolved;
    - `rejected`, `withdrawn`, `deprecated`, and `superseded` ADRs are historical context only.
@@ -27,14 +27,14 @@ Act as an ADR governance gate without turning every feature choice into an ADR.
    - `not ADR-worthy`: local/reversible implementation detail.
 5. Produce two compact tables:
 
-| Spec area | Relevant ADR | Evidence | Finding | Required action |
+| Spec area | Relevant ADR ID | Evidence | Finding | Required action |
 | --- | --- | --- | --- | --- |
 
 | Candidate decision | Why ADR-worthy | Alternatives/unknowns | Recommended timing |
 | --- | --- | --- | --- |
 
-6. Discuss blockers and candidate decisions with the user. For a conflict, offer explicit choices: conform the feature, narrow its scope, or supersede the governing ADR. Do not silently edit an accepted ADR.
-7. Invoke or recommend an RFC or design document before `adr-create` when the decision is still too broad or unresolved. Invoke or recommend `adr-create` for a concluded new decision and `adr-supersede` for a deliberate replacement. Add links from the spec to resulting ADRs when authorized.
+6. Discuss blockers and candidate decisions with the user. Cite relevant ADRs by stable ID. For a conflict, offer explicit choices: conform the feature, narrow its scope, or supersede the governing ADR. Do not silently edit an accepted ADR.
+7. Invoke or recommend an RFC or design document before `adr-create` when the decision is still too broad or unresolved. Invoke or recommend `adr-create` for a concluded new decision and `adr-supersede` for a deliberate replacement. Add links from the spec to resulting ADRs by stable ID when authorized.
 8. End with a gate result: `pass`, `pass with ADR actions`, or `blocked`, plus the smallest set of actions required to proceed.
 
 During Spec-driven Development, run this review after the feature specification establishes its boundaries and again after architecture/planning introduces concrete technical commitments. Do not change the framework's normal context-loading behavior; this review is an additional decision-governance pass.
