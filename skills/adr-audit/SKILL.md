@@ -19,8 +19,9 @@ Validate structure mechanically, then review semantic consistency separately.
 - status is one of `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`;
 - H1 ID/title agree with filename and frontmatter;
 - required sections exist: Context and problem statement, Decision drivers, Considered options, Decision outcome, Consequences, Confirmation, Links;
-- the decision outcome names the selected option, explains why it won against the drivers, and makes a clear active commitment;
-- material trade-offs are recorded with consistent option names and concrete good and bad arguments, plus neutral arguments when they matter;
+- the considered options are numbered, and the decision outcome identifies the selected option by number, explains why it won against the drivers, and makes a clear active commitment;
+- material trade-offs are recorded under headings with consistent option numbers and names, with concrete good and bad arguments, plus neutral arguments when they matter;
+- consequences describe the effects of adopting the selected option rather than duplicating the comparison arguments;
 - confirmation names an observable check, review, metric, or other evidence that can confirm the decision and implementation agree;
 - local ADR links resolve;
 - `superseded` has one or more valid `superseded-by` links and reciprocal `supersedes` metadata exists;
