@@ -23,6 +23,7 @@ This package contains several agent skills for the full Architecture Decision Re
 - Stable identity: existing ADR files and their IDs are never renumbered and normally never renamed
 - Statuses: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`
 - ADR reference direction: an ADR body, including `## Links`, may cite, reference, or link only to ADRs with lower numbers and a `date` not later than its own. The `superseded-by` frontmatter field is the sole exception because it records lifecycle metadata for a replacement.
+- Source-document reference direction: a specification, plan, RFC, design note, or other project document from which a project-specific decision is created or harvested links to that ADR. If a living current-state document later adopts a replacement, its governing link moves to the accepted replacement; intentionally historical text may retain the old link. The ADR must not mention, cite, or link back to those source documents, including under `## Links`. This restriction does not prevent links to eligible ADRs or to independent research, implementation, and verification evidence that does not duplicate the project decision.
 
 `docs/adrs/README.md` is the ADR catalog. It has one row for every ADR, sorted by number, with its stable ID, title, status, date, and replacement link. Keep the catalog in a bounded machine-maintained region so surrounding human prose remains intact:
 
@@ -70,13 +71,15 @@ Skill descriptions enable relevant automatic discovery, especially for `adr-revi
 - Keep `docs/adrs/README.md` as the complete ADR catalog with each ADR's current status.
 - Treat the product or architecture specification as the plan for the target state.
 - Use ADRs as the log of architectural decisions, including their transitions and reasons for choosing them.
-- Keep the specification concise: reflect the current result of applicable decisions and link to their ADRs; do not copy ADR rationale or lifecycle.
+- Keep source documents concise: retain the problem and, for accepted applicable decisions, the current result, then link to their ADRs; do not copy ADR rationale, alternatives, consequences, or lifecycle.
+- Keep decision provenance one-way: source specifications, plans, RFCs, and design notes link to the resulting ADR; the ADR does not link back to documents from which it was created or harvested.
+- Preserve independent normative requirements, contracts, acceptance criteria, and target-state descriptions when shortening source documents. Only decision-record content moves to the ADR.
 - Treat `accepted` as a decision status, not proof that the decision has been implemented.
 - Assemble deterministic, verifiable LLM context from the specification and its linked ADRs.
 - When creating or reviewing a feature specification, architecture plan, or significant technical design, run `adr-review-spec` skill before finalizing it.
 - If the review finds an unresolved architectural decision, use `adr-create` skill and link the resulting ADR from the specification or plan.
 - If planned work contradicts an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` skill with explicit approval.
-- After a feature is implemented or its final documentation is updated, run `adr-harvest` skill to find decisions that escaped registration.
+- After a feature is implemented or its final documentation is updated, run `adr-harvest` skill to find decisions that escaped registration and replace duplicated decision detail in the source documents with concise statements and ADR links.
 ```
 
 Suggested Spec Kit checkpoints:

@@ -30,13 +30,13 @@ Status: **draft**
 
 ## Decision outcome
 
-Chosen option: {option number}, because {it best satisfies the decision drivers}.
+{For an accepted ADR: "Chosen option: {option number}, because {it best satisfies the decision drivers}." For an unresolved draft: "No option has been selected."}
 
-We will {state the commitment in active voice}.
+{For an accepted ADR: "We will {state the commitment in active voice}." For an unresolved draft, state the questions or evidence needed for a decision without making a commitment.}
 
 ## Consequences
 
-{Describe the effects of adopting the chosen option, not the arguments used to compare alternatives. Include resulting constraints, operational effects, migration or follow-up work, risks, and implications for future changes.}
+{For an accepted ADR, describe the effects of adopting the chosen option, not the arguments used to compare alternatives, using the categories below. For an unresolved draft, replace the category placeholders with one or more `Undetermined` items that identify what depends on the decision; do not fabricate consequences.}
 
 * Good, because {benefit or desired quality improvement that follows from adopting the chosen option}.
 * Neutral, because {material effect that neither favors nor disfavors the decision}.
@@ -44,7 +44,7 @@ We will {state the commitment in active voice}.
 
 ## Confirmation
 
-* {Concrete test, review, metric, or operational observation that confirms the decision and implementation agree.}
+* {For an accepted ADR, name a concrete test, review, metric, or operational observation that confirms the decision and implementation agree. For an unresolved draft, name the evidence or review needed to make the decision.}
 
 ## Pros and cons of options
 
@@ -66,4 +66,4 @@ We will {state the commitment in active voice}.
 
 ## Links
 
-* {Related ADR, RFC, design, issue, experiment, benchmark, or external reference. Do not cite an ADR with a higher number or a later date.}
+* {Related ADR or independent implementation/verification evidence. Never cite a specification, plan, RFC, design note, or other source document used to create or harvest this ADR. Do not cite an ADR with a higher number or a later date.}

@@ -25,7 +25,7 @@ Apply the transition that matches what happened; do not use a generic `cancelled
 
 - `draft → accepted`: the problem statement, drivers, options, decision outcome, consequences, and confirmation are complete and the user explicitly approves it.
 - `draft → rejected`: alternatives were evaluated and the proposed decision was explicitly declined. Record why.
-- `draft → withdrawn`: the proposal was abandoned, became irrelevant, or was merged elsewhere before acceptance. Record why and link related work.
+- `draft → withdrawn`: the proposal was abandoned, became irrelevant, or was merged elsewhere before acceptance. Record why. Link only eligible ADRs or independent evidence, never a source document from which the proposal was created.
 - `accepted → deprecated`: the decision no longer applies and no single new ADR replaces it. Record the effective reason/date and migration implications.
 - `accepted → superseded`: only through `adr-supersede`, with a real replacement and reciprocal links.
 - `deprecated → superseded`: allowed through `adr-supersede` if a later direct replacement is adopted.
@@ -42,7 +42,8 @@ Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. R
    - replace it → hand off to `adr-supersede`.
 3. Before a transition that changes governance, obtain explicit user intent. Do not accept, reject, deprecate, or supersede merely because code appears to have drifted.
 4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant lower-numbered ADR links whose dates are no later than the current ADR's date. Preserve the original decision record, including its stable `ADR-NNNN` ID. Never add a higher-numbered or later-dated ADR ID or link to its body; `superseded-by` frontmatter is the lifecycle exception.
-5. Check that related documentation no longer describes a non-active ADR as governing. Report references needing updates; change them only when the task authorizes it.
-6. Refresh the bounded ADR catalog region in `docs/adrs/README.md` after the status change, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
+5. Find source documents that cite the transitioned ADR and update writable local sources in the same change. After acceptance, keep a concise problem/current-result statement and the ADR link. After rejection or withdrawal, keep only the problem and link, without copying lifecycle status or presenting an outcome as governing. After deprecation, remove the retired result from current-state text while preserving independent requirements and any intentionally historical reference. Keep links one-way; never add a source-document reference to the ADR.
+6. Do not edit generated or read-only source documents. Locate and update their maintaining source instead. If the necessary source change is semantically ambiguous or outside the writable workspace, ask the user and report the transition change set as incomplete until it is resolved.
+7. Refresh the bounded ADR catalog region in `docs/adrs/README.md` after the status change, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
 
 All ADRs remain in `docs/adrs/` under their stable `NNNN-short-title.md` filenames and retain their matching `ADR-NNNN` IDs. Cite them in human-facing documentation and code by stable ID.
