@@ -26,11 +26,12 @@ Replace a decision without rewriting history. The old ADR explains why the earli
 4. Once the user explicitly accepts the replacement, update both records in one change:
    - new ADR: `status: accepted`; add the old ADR's relative link to `supersedes`;
    - old ADR: `status: superseded`; set `superseded-by` to the new ADR's relative link;
-   - add reciprocal explanatory links that cite each ADR by stable ID, plus relevant migration evidence, in both `## Links` sections.
+   - add an explanatory link to the old ADR, plus relevant migration evidence, in the new ADR's `## Links` section;
+   - do not add a link to or mention of the new ADR in the old ADR's body. Its `superseded-by` frontmatter field is the sole permitted reference to an ADR with a higher number or later date.
 5. State explicitly that supersession is total. Do not mark the old ADR `superseded` while any design still depends on an unrecorded surviving part of it.
 6. Refresh the bounded ADR catalog region in `docs/adrs/README.md`, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
-7. Validate that the new ADR ID matches its H1, filename, and frontmatter number; both links resolve; metadata and prose agree; the catalog matches the metadata; and no intermediate state leaves two contradictory accepted ADRs.
+7. Validate that the new ADR ID matches its H1, filename, and frontmatter number; lifecycle metadata resolves and agrees; neither ADR body refers to an ADR with a higher number or later date; the catalog matches the metadata; and no intermediate state leaves two contradictory accepted ADRs.
 
 Use the canonical status vocabulary: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`. `superseded` always requires a real replacement ADR. If an accepted decision merely stops applying and has no replacement, use `deprecated` via `adr-transition`.
 
-Do not alter the old ADR's original context, decision, or consequences except for lifecycle metadata, a prominent supersession note, and links.
+Do not alter the old ADR's original context, decision, or consequences except for lifecycle metadata and an unnumbered supersession note. Do not add a `## Links` entry or body text that identifies a replacement with a higher number or later date.

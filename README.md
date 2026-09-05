@@ -22,6 +22,7 @@ This package contains several agent skills for the full Architecture Decision Re
 - Stable ID: `ADR-NNNN`, where `NNNN` is the ADR number in its H1, filename, and frontmatter; for example, `ADR-0001`
 - Stable identity: existing ADR files and their IDs are never renumbered and normally never renamed
 - Statuses: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`
+- ADR reference direction: an ADR body, including `## Links`, may cite, reference, or link only to ADRs with lower numbers and a `date` not later than its own. The `superseded-by` frontmatter field is the sole exception because it records lifecycle metadata for a replacement.
 
 `docs/adrs/README.md` is the ADR catalog. It has one row for every ADR, sorted by number, with its stable ID, title, status, date, and replacement link. Keep the catalog in a bounded machine-maintained region so surrounding human prose remains intact:
 
@@ -41,7 +42,7 @@ Create the file with this region when it is absent. Refresh the region whenever 
 - a proposal was considered and declined: `rejected`;
 - an accepted decision ceased to govern without a direct replacement: `deprecated`.
 
-If a new ADR directly replaces an old accepted decision, use `superseded` and reciprocal links.
+If a new ADR directly replaces an old accepted decision, use `superseded` and reciprocal lifecycle metadata.
 
 ## Status transitions
 
@@ -56,7 +57,7 @@ stateDiagram-v2
     deprecated --> superseded
 ```
 
-Rejected, withdrawn, and superseded ADRs remain as history. Reconsidering them creates a new linked ADR rather than reopening the old record.
+Rejected, withdrawn, and superseded ADRs remain as history. Reconsidering one creates a new ADR that links back to the old record rather than reopening it.
 
 ## Recommended SDD integration
 

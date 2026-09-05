@@ -66,4 +66,4 @@ We will {state the commitment in active voice}.
 
 ## Links
 
-* {Related ADR, RFC, design, issue, experiment, benchmark, or external reference.}
+* {Related ADR, RFC, design, issue, experiment, benchmark, or external reference. Do not cite an ADR with a higher number or a later date.}

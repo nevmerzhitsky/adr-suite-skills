@@ -33,6 +33,10 @@ FILENAME = re.compile(r"^(?P<number>\d{4})-(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)\.m
 H1 = re.compile(r"^# ADR-(?P<number>\d{4}): (?P<title>.+?)\s*$", re.MULTILINE)
 HEADING = re.compile(r"^## (?P<title>.+?)\s*$", re.MULTILINE)
 LINK = re.compile(r"\[[^\]]+\]\((?P<target>[^)]+\.md(?:#[^)]*)?)\)")
+ADR_ID = re.compile(r"\bADR-(?P<number>\d{4})\b")
+ADR_FILENAME = re.compile(
+    r"(?<![A-Za-z0-9-])(?P<number>\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\b"
+)
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
@@ -57,6 +61,44 @@ def parse_ref_list(raw: str) -> list[str]:
     if value.startswith("[") and value.endswith("]"):
         value = value[1:-1]
     return [part.strip().strip('"\'') for part in value.split(",") if part.strip()]
+
+
+def adr_references(body: str) -> set[str]:
+    references = {f"ADR-{match.group('number')}" for match in ADR_ID.finditer(body)}
+    references.update(
+        f"ADR-{match.group('number')}" for match in ADR_FILENAME.finditer(body)
+    )
+    return references
+
+
+def later_numbered_adr_references(body: str, current_number: str) -> list[str]:
+    current = int(current_number)
+    return sorted(
+        reference
+        for reference in adr_references(body)
+        if int(reference.removeprefix("ADR-")) > current
+    )
+
+
+def later_dated_adr_references(
+    body: str, current_date: str, reference_dates: dict[str, str]
+) -> list[tuple[str, str]]:
+    return sorted(
+        (reference, reference_dates[reference])
+        for reference in adr_references(body)
+        if reference in reference_dates and reference_dates[reference] > current_date
+    )
+
+
+def adr_reference_dates(metadata: dict[Path, dict[str, str]]) -> dict[str, str]:
+    dates: dict[str, str] = {}
+    for path, meta in metadata.items():
+        match = FILENAME.fullmatch(path.name)
+        adr_date = meta.get("date", "")
+        if not match or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", adr_date):
+            continue
+        dates[f"ADR-{match.group('number')}"] = adr_date
+    return dates
 
 
 def validate_file(path: Path, seen: dict[str, Path]) -> tuple[list[str], dict[str, str]]:
@@ -100,6 +142,10 @@ def validate_file(path: Path, seen: dict[str, Path]) -> tuple[list[str], dict[st
     for heading in sorted(REQUIRED_HEADINGS - headings):
         errors.append(f"missing section: ## {heading}")
 
+    if file_number:
+        for reference in later_numbered_adr_references(body, file_number):
+            errors.append(f"body references higher-numbered ADR: {reference}")
+
     for link in LINK.finditer(text):
         target = link.group("target").split("#", 1)[0]
         if "://" in target:
@@ -135,6 +181,21 @@ def main() -> int:
         for error in errors:
             failures += 1
             print(f"ERROR {path.relative_to(root)}: {error}")
+
+    reference_dates = adr_reference_dates(metadata)
+    for path, meta in metadata.items():
+        current_date = meta.get("date", "")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", current_date):
+            continue
+        _, body = parse_frontmatter(path.read_text(encoding="utf-8"))
+        for reference, reference_date in later_dated_adr_references(
+            body, current_date, reference_dates
+        ):
+            failures += 1
+            print(
+                f"ERROR {path.relative_to(root)}: body references ADR dated "
+                f"{reference_date}, after current ADR date {current_date}: {reference}"
+            )
 
     for path, meta in metadata.items():
         superseded_by = meta.get("superseded-by", "").strip().strip('"\'')

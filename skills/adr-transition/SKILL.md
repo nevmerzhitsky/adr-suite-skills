@@ -30,7 +30,7 @@ Apply the transition that matches what happened; do not use a generic `cancelled
 - `accepted → superseded`: only through `adr-supersede`, with a real replacement and reciprocal links.
 - `deprecated → superseded`: allowed through `adr-supersede` if a later direct replacement is adopted.
 
-Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. Reconsideration gets a new ADR linked under `## Links`, rather than reopening history.
+Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. Reconsideration gets a new ADR that links back to the old record under the new ADR's `## Links`, rather than reopening history. Do not add the new ADR to the old record's body.
 
 ## Procedure
 
@@ -41,7 +41,7 @@ Treat `rejected`, `withdrawn`, and `superseded` as terminal historical states. R
    - retire an accepted decision without replacement → `deprecated`;
    - replace it → hand off to `adr-supersede`.
 3. Before a transition that changes governance, obtain explicit user intent. Do not accept, reject, deprecate, or supersede merely because code appears to have drifted.
-4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant links. Preserve the original decision record, including its stable `ADR-NNNN` ID.
+4. Change only status/lifecycle metadata, a short dated lifecycle note, and relevant lower-numbered ADR links whose dates are no later than the current ADR's date. Preserve the original decision record, including its stable `ADR-NNNN` ID. Never add a higher-numbered or later-dated ADR ID or link to its body; `superseded-by` frontmatter is the lifecycle exception.
 5. Check that related documentation no longer describes a non-active ADR as governing. Report references needing updates; change them only when the task authorizes it.
 6. Refresh the bounded ADR catalog region in `docs/adrs/README.md` after the status change, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
 

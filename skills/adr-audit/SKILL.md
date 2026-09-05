@@ -24,6 +24,7 @@ Validate structure mechanically, then review semantic consistency separately.
 - consequences describe the effects of adopting the selected option rather than duplicating the comparison arguments;
 - confirmation names an observable check, review, metric, or other evidence that can confirm the decision and implementation agree;
 - local ADR links resolve;
+- each ADR body, including `## Links`, cites, references, or links only lower-numbered ADRs whose `date` is not later than the current ADR's date. The `superseded-by` frontmatter field is the sole lifecycle-metadata exception;
 - `superseded` has one or more valid `superseded-by` links and reciprocal `supersedes` metadata exists;
 - non-superseded ADRs do not claim a replacement;
 - accepted ADRs are not contradicted by another accepted ADR without an explicit scope distinction;
