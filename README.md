@@ -66,13 +66,17 @@ Skill descriptions enable relevant automatic discovery, especially for `adr-revi
 ```markdown
 ## ADR governance
 
-- Store ADRs in `docs/adrs/` and use `NNNN-short-title.md` filenames.
 - Cite ADRs in documentation and code as `ADR-NNNN`.
 - Keep `docs/adrs/README.md` as the complete ADR catalog with each ADR's current status.
-- When creating or reviewing a feature specification, architecture plan, or significant technical design, run `adr-review-spec` before finalizing it.
-- If the review finds an unresolved architectural decision, use `adr-create` and link the resulting ADR from the specification or plan.
-- If planned work contradicts an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` with explicit approval.
-- After a feature is implemented or its final documentation is updated, run `adr-harvest` to find decisions that escaped registration.
+- Treat the product or architecture specification as the plan for the target state.
+- Use ADRs as the log of architectural decisions, including their transitions and reasons for choosing them.
+- Keep the specification concise: reflect the current result of applicable decisions and link to their ADRs; do not copy ADR rationale or lifecycle.
+- Treat `accepted` as a decision status, not proof that the decision has been implemented.
+- Assemble deterministic, verifiable LLM context from the specification and its linked ADRs.
+- When creating or reviewing a feature specification, architecture plan, or significant technical design, run `adr-review-spec` skill before finalizing it.
+- If the review finds an unresolved architectural decision, use `adr-create` skill and link the resulting ADR from the specification or plan.
+- If planned work contradicts an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` skill with explicit approval.
+- After a feature is implemented or its final documentation is updated, run `adr-harvest` skill to find decisions that escaped registration.
 ```
 
 Suggested Spec Kit checkpoints:
