@@ -7,11 +7,14 @@ This package contains several agent skills for the full Architecture Decision Re
 | Skill | Purpose | Typical phase |
 | --- | --- | --- |
 | `adr-create` | Explore alternatives with the user and create a draft or accepted ADR | Architecture/design |
+| `adr-review-spec` | Check a planned feature for conflicts with accepted ADRs | Specification and planning |
+| `adr-harvest` | Recover missing decisions from completed features or brownfield code | Post-implementation/baseline |
 | `adr-supersede` | Replace an active decision and maintain reciprocal links | Architecture change |
 | `adr-transition` | Accept/reject/withdraw/deprecate an ADR using valid transitions | Decision governance |
-| `adr-harvest` | Recover missing decisions from completed features or brownfield code | Post-implementation/baseline |
-| `adr-review-spec` | Detect conflicts and missing ADRs in a planned feature | Specification and planning |
 | `adr-audit` | Validate filenames, metadata, links, statuses, and repository health | CI/maintenance |
+
+An operator may invoke `adr-review-spec` to check a specification for concrete conflicts with scoped accepted ADRs. It does not discover missing ADRs or require new ones. Use `adr-create` when the operator decides to record a new architectural decision. After implementation or final documentation updates, an operator may run `adr-harvest` against an explicit feature or source set to recover durable decisions.
+
 
 ## Canonical convention
 
@@ -35,7 +38,19 @@ This package contains several agent skills for the full Architecture Decision Re
 <!-- adr-catalog:end -->
 ```
 
-Create the file with this region when it is absent. Refresh the region whenever an ADR is created or its status, title, date, or replacement changes. The catalog is the discovery view; ADR frontmatter remains the authoritative record for a decision's full content and lifecycle links. Cite ADRs in documentation and code by stable ID, not by filename or title alone; use a relative Markdown link to the ADR file where links are supported or required.
+Create the file with this region when creating the first ADR. Refresh the region whenever an ADR is created or its status, title, date, or replacement changes. The catalog is the discovery view; ADR frontmatter remains the authoritative record for a decision's full content and lifecycle links. Cite ADRs in documentation and code by stable ID, not by filename or title alone; use a relative Markdown link to the ADR file where links are supported or required.
+
+## Existing ADR discovery
+
+Treat an existing ADR corpus as available only when all of the following are true:
+
+- `docs/adrs/README.md` exists and contains an ADR catalog with ADR links;
+- `docs/adrs/` contains at least one ADR file other than `README.md`;
+- the catalog identifies the ADR records to inspect.
+
+If any condition is false, do not search for or require existing ADRs. A missing or empty ADR corpus is not a finding by itself. `adr-create` may establish the first ADR and catalog when no ADR files exist. If ADR files exist but the catalog is missing or does not list ADRs, do not inspect those files to reconstruct the corpus; ask the operator before making a change that would depend on their numbering or lifecycle.
+
+When the corpus is available, first read the catalog and list local ADR files, then read only the records needed for the task. Do not search for ADR documents outside `docs/adrs/`. The sole exception is a specific ADR file outside that directory linked directly from `docs/adrs/README.md`; inspect only that linked file. Do not search project-wide architecture documentation, constitutions, or Spec-driven Development context or memory to find ADRs. A document explicitly named by the operator may be source evidence for creating or harvesting a new ADR, but it does not expand ADR discovery.
 
 `cancelled` is deliberately not a canonical status because it hides three different events:
 
@@ -62,7 +77,7 @@ Rejected, withdrawn, and superseded ADRs remain as history. Reconsidering one cr
 
 ## Recommended SDD integration
 
-Skill descriptions enable relevant automatic discovery, especially for `adr-review-spec`, but project-level instructions provide the reliable governance gate. Add the following policy to the project's agent instructions (for example `AGENTS.md`) while leaving the framework's official commands and normal context-loading policy unchanged:
+Project-level instructions may define when to invoke ADR skills, while leaving the framework's official commands and normal context-loading policy unchanged. Add the following policy to the project's agent instructions (for example `AGENTS.md`):
 
 ```markdown
 ## ADR governance
@@ -75,15 +90,6 @@ Skill descriptions enable relevant automatic discovery, especially for `adr-revi
 - Keep decision provenance one-way: source specifications, plans, RFCs, and design notes link to the resulting ADR; the ADR does not link back to documents from which it was created or harvested.
 - Preserve independent normative requirements, contracts, acceptance criteria, and target-state descriptions when shortening source documents. Only decision-record content moves to the ADR.
 - Treat `accepted` as a decision status, not proof that the decision has been implemented.
-- Assemble deterministic, verifiable LLM context from the specification and its linked ADRs.
-- When creating or reviewing a feature specification, architecture plan, or significant technical design, run `adr-review-spec` skill before finalizing it.
-- If the review finds an unresolved architectural decision, use `adr-create` skill and link the resulting ADR from the specification or plan.
-- If planned work contradicts an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` skill with explicit approval.
-- After a feature is implemented or its final documentation is updated, run `adr-harvest` skill to find decisions that escaped registration and replace duplicated decision detail in the source documents with concise statements and ADR links.
+- Use the ADR discovery boundary in this package. Do not search project architecture documents, constitutions, or framework context to locate ADRs.
+- If an optional review finds a concrete conflict with an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` with explicit approval.
 ```
-
-Suggested Spec Kit checkpoints:
-
-1. After `/speckit.specify`: review boundaries, contracts, data/security constraints, and conflicts with accepted ADRs.
-2. After `/speckit.plan`: review concrete technical commitments and create/supersede ADRs before implementation tasks are finalized.
-3. After implementation/final docs: harvest only durable decisions that were actually adopted.

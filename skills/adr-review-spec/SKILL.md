@@ -1,40 +1,34 @@
 ---
 name: adr-review-spec
-description: Review a feature specification, plan, or architecture design against active ADRs and detect unrecorded architectural decisions. Use while specifying or planning architecturally significant work, including Spec-driven Development workflows, before the design is finalized.
+description: Review a feature specification, plan, or architecture design for concrete conflicts with scoped accepted ADRs. Use while specifying or planning architecturally significant work, including Spec-driven Development workflows, before the design is finalized.
 license: MIT
 metadata:
   family: "adr-suite"
+disable-model-invocation: true
 ---
 
-# Review a planned feature against ADRs
+# Check a planned feature for ADR conflicts
 
-Act as an ADR governance gate without turning every feature choice into an ADR.
+Review only concrete conflicts. This is not a universal governance gate and does not determine whether a new ADR is needed.
+
+## Existing ADR discovery
+
+Treat existing ADRs as available only when `docs/adrs/README.md` exists, contains an ADR catalog with ADR links, and `docs/adrs/` contains at least one ADR file other than `README.md`. If any condition is false, do not search for or require ADRs. Continue the requested specification review without ADR conflict checking.
+
+When the corpus is available, read the catalog and list local ADR files before reading only the accepted ADRs relevant to the explicit scope. Do not search outside `docs/adrs/` for ADRs, except for a specific external ADR file linked directly from `docs/adrs/README.md`. Do not search project-wide architecture documents, constitutions, or Spec-driven Development context or memory to locate ADRs.
 
 ## Review method
 
-1. Read the target specification/plan and its directly relevant context. Start discovery with the catalog in `docs/adrs/README.md`, then verify relevant ADR metadata and content. Identify each ADR by its stable `ADR-NNNN` ID. Inventory ADRs by status:
-   - `accepted` ADRs are governing;
-   - `draft` ADRs are advisory/unresolved;
-   - `rejected`, `withdrawn`, `deprecated`, and `superseded` ADRs are historical context only.
-2. Map relevant statements in the planned work to governing ADRs. A conflict requires a concrete contradiction or incompatible assumption, not merely different wording.
-3. Identify architectural decisions not yet recorded. Use significance tests: cross-cutting reach, hard-to-reverse commitment, external/public contract, data/security boundary, operational topology, major dependency, migration cost, or a trade-off likely to be revisited.
-4. Classify findings:
-    - `blocker`: directly violates an accepted ADR or depends on an unresolved architectural choice;
-    - `needs RFC before ADR`: a broad, cross-team, or high-risk change still needs exploration before an ADR can record a concluded decision;
-    - `needs ADR`: coherent design is possible, but an important new decision needs explicit approval;
-   - `clarification`: insufficient specification evidence;
-   - `aligned`: conforms to a relevant active ADR;
-   - `not ADR-worthy`: local/reversible implementation detail.
-5. Produce two compact tables:
+1. Read the target specification, plan, or design and materials supplied by the operator. Do not use surrounding project context to locate ADRs or unrecorded decisions. Review ADRs only when the operator requested the check or the target explicitly identifies the ADR scope.
+2. If the ADR corpus and an ADR scope are available, read the catalog, list local ADR files, and read only relevant `accepted` ADRs. Identify each ADR by stable `ADR-NNNN` ID.
+3. Map relevant statements in the planned work to those ADRs. A conflict requires a concrete contradiction or incompatible assumption, not merely different wording.
+4. Classify each checked area as `conflict`, `aligned`, or `clarification`.
+5. Produce one compact table:
 
 | Spec area | Relevant ADR ID | Evidence | Finding | Required action |
 | --- | --- | --- | --- | --- |
 
-| Candidate decision | Why ADR-worthy | Alternatives/unknowns | Recommended timing |
-| --- | --- | --- | --- |
+6. Discuss each conflict with the user. Cite relevant ADRs by stable ID. Offer explicit choices: conform the feature, narrow its scope, or supersede the governing ADR. Do not silently edit an accepted ADR.
+7. End with `pass`, `pass with conflict action`, or `blocked`, plus the smallest set of actions required to proceed.
 
-6. Discuss blockers and candidate decisions with the user. Cite relevant ADRs by stable ID. For a conflict, offer explicit choices: conform the feature, narrow its scope, or supersede the governing ADR. Do not silently edit an accepted ADR.
-7. Invoke or recommend an RFC or design document before `adr-create` when the decision is still too broad or unresolved. Invoke or recommend `adr-create` for a concluded new decision and `adr-supersede` for a deliberate replacement. When an ADR is created, replace duplicated decision rationale, alternatives, consequences, and lifecycle in the reviewed document with a concise problem statement and, for an accepted ADR, its current result, plus a link labeled with the stable ADR ID. For a draft ADR, retain only the problem and link; do not copy its status or present an outcome as governing. Preserve independent requirements, contracts, acceptance criteria, and target-state descriptions. The link is one-way: do not add a reciprocal reference from the ADR to the reviewed source document. If this is a review-only invocation without edit authorization, make the source rewrite an explicit gate action.
-8. End with a gate result: `pass`, `pass with ADR actions`, or `blocked`, plus the smallest set of actions required to proceed.
-
-During Spec-driven Development, run this review after the feature specification establishes its boundaries and again after architecture/planning introduces concrete technical commitments. Do not change the framework's normal context-loading behavior; this review is an additional decision-governance pass.
+During Spec-driven Development, run this review only when the operator requests it or when the target explicitly identifies relevant ADRs. Do not change the framework's normal context-loading behavior.

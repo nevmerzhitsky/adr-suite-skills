@@ -1,6 +1,6 @@
 ---
 name: adr-harvest
-description: Discover significant architectural decisions embedded in completed feature documentation, code, tests, or migrations, register missing ADRs, and replace duplicated decision detail in source documents with concise ADR references. Use after implementation or when documenting a brownfield system; do not use to record every implementation detail.
+description: Discover significant architectural decisions in an explicit completed feature or source set, register missing ADRs, and replace duplicated decision detail in those source documents with concise ADR references. Use after implementation or for bounded brownfield work; do not use to record every implementation detail.
 license: MIT
 metadata:
   family: "adr-suite"
@@ -12,7 +12,13 @@ Recover decisions from completed work without fabricating the historical rationa
 
 ## Source-document direction
 
-A specification, plan, RFC, design note, issue, proposal, project README, or other non-ADR project document named or linked in the prompt, or used to frame or recover the decision during discovery, is a source document. Decision provenance is one-way: source documents link to the harvested ADR, and the ADR never mentions, cites, or links back to its source documents, including under `## Links`. Do not store the source-document list in ADR prose or metadata. ADR-to-ADR links remain valid under the repository's number and date rules. Independent external research, code, tests, migrations, metrics, and operational evidence may be linked when they are not source documents for the recovered decision.
+Only the explicit feature or source set, and non-ADR documents explicitly named or linked by the operator, are source documents. Decision provenance is one-way: source documents link to the harvested ADR, and the ADR never mentions, cites, or links back to its source documents, including under `## Links`. Do not store the source-document list in ADR prose or metadata. ADR-to-ADR links remain valid under the repository's number and date rules. Independent external research, code, tests, migrations, metrics, and operational evidence may be linked when they are not source documents for the recovered decision.
+
+## Existing ADR discovery
+
+Existing ADRs are available only when `docs/adrs/README.md` exists, contains an ADR catalog with ADR links, and `docs/adrs/` contains at least one ADR file other than `README.md`. If any condition is false, do not search for or require existing ADRs. When ADR files exist but the catalog is missing or does not list ADRs, do not inspect those files to reconstruct the corpus; ask the operator before a change that depends on their numbering or lifecycle.
+
+When the corpus is available, read the catalog and list local ADR files before reading only records relevant to the named work. Do not search outside `docs/adrs/` for ADRs, except for a specific external ADR file linked directly from `docs/adrs/README.md`. Do not search project-wide architecture documents, constitutions, or Spec-driven Development context or memory to locate ADRs. The named feature and its evidence are source material for harvesting, not an ADR-discovery scope.
 
 ## What qualifies
 
@@ -20,9 +26,9 @@ A candidate should have lasting consequences beyond one local implementation det
 
 ## Workflow
 
-1. Read the named feature/specification and the minimum supporting code, tests, schema/migrations, and active ADRs necessary to verify it. Record the exact source-document set for the working session so none is linked from a harvested ADR. Treat final docs and observable implementation as evidence, not as proof of unstated rationale.
+1. Read the named feature or source set and the minimum supporting code, tests, schema, and migrations needed to verify it. If existing ADR discovery is available, read only the relevant discovered ADRs. Record the exact source-document set for the working session so none is linked from a harvested ADR. Treat final docs and observable implementation as evidence, not as proof of unstated rationale.
 2. Extract atomic candidate decisions. Separate one decision from a bundle when it could be reversed independently.
-3. Deduplicate against all ADRs, including rejected, deprecated, and superseded records. Identify existing records by stable ID. Existing history may explain the choice even when it is not active.
+3. If existing ADR discovery is available, deduplicate against the discovered ADR corpus, including rejected, deprecated, and superseded records. Identify existing records by stable ID. Existing history may explain the choice even when it is not active.
 4. Present a candidate register before writing:
 
 | Candidate | Architectural significance | Evidence | Existing ADR ID | Confidence | Proposed ADR action | Source-document rewrite |
@@ -35,7 +41,7 @@ A candidate should have lasting consequences beyond one local implementation det
 9. Update every writable local source document for each selected candidate in the same change. Replace duplicated decision analysis, rationale, alternatives, consequences, and lifecycle text with a concise statement of the problem and, for an accepted ADR, the current result, plus a relative Markdown link labeled with the concrete stable ADR ID. For a draft ADR, retain only the problem and link; do not copy its status or present an outcome as governing. Preserve independent requirements, contracts, acceptance criteria, target-state behavior, and implementation evidence. When multiple source passages express the same decision, normalize each one or consolidate them without losing necessary document structure.
 10. Do not edit generated or read-only documents. Locate and update their maintaining source instead. If a source document is outside the writable workspace, cannot link to the ADR, or cannot be shortened without an unresolved semantic choice, ask the operator and report the harvest as incomplete until the source side is resolved.
 11. Refresh the bounded ADR catalog region in `docs/adrs/README.md`, creating it when absent. Include every ADR, sorted by number, with stable ID, title, status, date, and replacement link. Preserve prose outside the region.
-12. Check the generated ADRs against each other and active ADRs. Verify that no harvested ADR mentions or links a source document, every editable source document links to the concrete ADR by stable ID, and no source retains duplicated decision-record content. Report uncovered ambiguities or apparent drift.
+12. Check the generated ADRs against each other and, when available, the relevant discovered ADRs. Verify that no harvested ADR mentions or links a source document, every editable source document links to the concrete ADR by stable ID, and no source retains duplicated decision-record content. Report uncovered ambiguities or apparent drift.
 
 Use the template from the `adr-create` skill in `assets/adr.md` when writing each ADR. Read it before writing, replace every `{placeholder}`, and omit no required section. Use the canonical statuses from the repository: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`.
 

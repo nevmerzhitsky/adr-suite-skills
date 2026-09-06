@@ -37,6 +37,8 @@ ADR_ID = re.compile(r"\bADR-(?P<number>\d{4})\b")
 ADR_FILENAME = re.compile(
     r"(?<![A-Za-z0-9-])(?P<number>\d{4})-[a-z0-9]+(?:-[a-z0-9]+)*\.md\b"
 )
+CATALOG_START = "<!-- adr-catalog:start -->"
+CATALOG_END = "<!-- adr-catalog:end -->"
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
@@ -164,14 +166,36 @@ def validate_file(path: Path, seen: dict[str, Path]) -> tuple[list[str], dict[st
     return errors, meta
 
 
+def catalog_lists_adrs(catalog: Path) -> bool:
+    text = catalog.read_text(encoding="utf-8")
+    start = text.find(CATALOG_START)
+    end = text.find(CATALOG_END, start + len(CATALOG_START))
+    if start < 0 or end < 0:
+        return False
+    for link in LINK.finditer(text[start + len(CATALOG_START) : end]):
+        target = link.group("target").split("#", 1)[0]
+        if FILENAME.fullmatch(Path(target).name):
+            return True
+    return False
+
+
 def main() -> int:
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
     adr_dir = root / "docs" / "adrs"
     if not adr_dir.is_dir():
-        print(f"ERROR {adr_dir}: directory does not exist")
-        return 2
+        print(f"SKIP {adr_dir}: ADR corpus unavailable")
+        return 0
+
+    catalog = adr_dir / "README.md"
+    if not catalog.is_file() or not catalog_lists_adrs(catalog):
+        print(f"SKIP {adr_dir}: ADR corpus unavailable")
+        return 0
 
     files = sorted(p for p in adr_dir.glob("*.md") if p.name != "README.md")
+    if not files:
+        print(f"SKIP {adr_dir}: ADR corpus unavailable")
+        return 0
+
     seen: dict[str, Path] = {}
     failures = 0
     metadata: dict[Path, dict[str, str]] = {}

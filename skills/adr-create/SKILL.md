@@ -23,6 +23,13 @@ Turn one architecturally significant topic into one explicit decision and one AD
 - Use only these statuses: `draft`, `accepted`, `rejected`, `withdrawn`, `deprecated`, `superseded`.
 - Use `decision-makers` for people who made the decision. Always include `consulted` and `informed`; use empty lists when they do not apply.
 
+## Existing ADR discovery
+
+- Treat existing ADRs as available only when `docs/adrs/README.md` exists, contains an ADR catalog with ADR links, and `docs/adrs/` contains at least one ADR file other than `README.md`.
+- If any of those conditions is false, do not search for or require existing ADRs. When no ADR files exist, create the first record as `ADR-0001` and create the catalog with it. When ADR files exist but the catalog is missing or does not list ADRs, do not inspect those files to reconstruct the corpus; ask the operator before a change that depends on their numbering or lifecycle.
+- When the corpus is available, read the catalog and list local ADR files before reading only the records relevant to the decision. Do not search outside `docs/adrs/` for ADRs. Follow only a specific external ADR file linked directly from `docs/adrs/README.md`.
+- Do not search project-wide architecture documents, constitutions, or Spec-driven Development context or memory to locate ADRs. An operator-named document may be source evidence for this new ADR, but it is not an ADR-discovery source.
+
 ## When to record
 
 - Record a decision that affects system structure, non-functional qualities, dependencies, interfaces, engineering standards, or a costly-to-reverse implementation path.
@@ -32,13 +39,13 @@ Turn one architecturally significant topic into one explicit decision and one AD
 
 ## Workflow
 
-1. Read the relevant request, repository documentation, constraints, the ADR catalog in `docs/adrs/README.md`, the relevant ADR records, and only the code/tests needed to ground the decision. Track every non-ADR project document used to frame, explore, or record this decision as a source document, including specifications, plans, RFCs, design notes, issues, proposals, and project READMEs.
+1. Read the request, its explicit constraints, operator-named source documents, and only the code/tests needed to ground the decision. If existing ADR discovery is available, read the catalog, list local ADR files, and read only relevant ADR records. Track each non-ADR project document used to frame, explore, or record this decision as a source document.
 2. Restate the decision boundary as a problem statement: context, scope, facts, competing forces, constraints, decision drivers, and what is deliberately out of scope. Keep this neutral; do not smuggle the preferred solution into it. Surface unknowns rather than inventing them.
 3. Identify credible alternatives. Include the status quo when it is viable. Merge cosmetically different variants; keep genuinely different trade-offs separate.
 4. Compare the alternatives against decision drivers. Cover benefits, costs, neutral effects, reversibility, migration, operational effects, security/privacy, compatibility, and evidence gaps when relevant.
 5. Discuss the decision with the user. Ask a small batch of high-leverage questions, preferably 1–3 at a time. Use selectable options when choices are known and an open question when the user's rationale or a missing alternative matters. Explain the consequence of each option.
 6. Record the selected option only after the user decides. State the outcome in active voice: `We will ...`. If the user wants documentation before deciding, create a `draft` with the unresolved questions visible. Set `accepted` only on explicit user approval.
-7. Check for overlap or conflict with existing ADRs. If the new decision replaces an active ADR, use the `adr-supersede` workflow instead.
+7. If existing ADR discovery is available, check for overlap or conflict with the relevant discovered ADRs. If the new decision replaces an active ADR, use the `adr-supersede` workflow instead.
 8. Write the next numbered file with its matching stable ID. Validate its links, metadata, that it does not mention or link a source document, and that every ADR reference in its body has a lower number and a date no later than the current ADR's date.
 9. For each writable local source document, replace duplicated rationale, alternatives, consequences, and lifecycle text with a concise problem statement and, for an accepted ADR, its current result, plus a relative link labeled with the stable ADR ID. For a draft ADR, retain only the problem and link; do not copy its status or present an outcome as governing. Preserve independent requirements, contracts, acceptance criteria, target-state descriptions, and implementation evidence. Ask before editing when that boundary is ambiguous.
 10. Do not edit generated or read-only source documents. Locate and update their maintaining source instead. If a source document cannot be normalized or linked without an unresolved semantic choice, ask the user and report the ADR change set as incomplete until the source side is resolved.
