@@ -90,6 +90,6 @@ Project-level instructions may define when to invoke ADR skills, while leaving t
 - Keep decision provenance one-way: source specifications, plans, RFCs, and design notes link to the resulting ADR; the ADR does not link back to documents from which it was created or harvested.
 - Preserve independent normative requirements, contracts, acceptance criteria, and target-state descriptions when shortening source documents. Only decision-record content moves to the ADR.
 - Treat `accepted` as a decision status, not proof that the decision has been implemented.
-- Use the ADR discovery boundary in this package. Do not search project architecture documents, constitutions, or framework context to locate ADRs.
+- Locate ADRs only through the catalog in `docs/adrs/README.md` and the files in `docs/adrs/`. Do not search project architecture documents, constitutions, or framework context to locate ADRs.
 - If an optional review finds a concrete conflict with an accepted ADR, do not silently proceed: conform the design or use `adr-supersede` with explicit approval.
 ```
